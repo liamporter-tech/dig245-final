@@ -4,15 +4,42 @@
     <!-- meta tags, links to css, etc. -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Final Project</title>
+    <title>Nearby ALPR Cameras | Final Project</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
 
-    <!-- visible content goes here -->
-	<h1>Final Project</h1>
-	<p>See README.md for info</p>
+    <!-- [AI-Generated: Copilot | 2026-11-10] -->
+    <!-- Intent: Provide controls and accessible results for nearby OSM ALPR data. -->
+    <main>
+        <h1>Nearby ALPR cameras</h1>
+        <p>Search crowdsourced license-plate-reader locations mapped in OpenStreetMap.</p>
+
+        <button id="use-location" type="button">Use my current location</button>
+
+        <form id="camera-search">
+            <label for="latitude">Latitude</label>
+            <input id="latitude" name="latitude" type="number" min="-90" max="90" step="any" required>
+
+            <label for="longitude">Longitude</label>
+            <input id="longitude" name="longitude" type="number" min="-180" max="180" step="any" required>
+
+            <label for="radius">Search radius (meters)</label>
+            <input id="radius" name="radius" type="number" min="100" max="25000" step="100" value="5000" required>
+
+            <button type="submit">Search nearby cameras</button>
+        </form>
+
+        <p id="api-status" role="status" aria-live="polite">Enter coordinates or choose your current location to search.</p>
+
+        <section aria-labelledby="results-heading">
+            <h2 id="results-heading">Mapped locations</h2>
+            <ul id="camera-results"></ul>
+        </section>
+
+        <p>Camera locations are queried from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> through the Overpass API. Data may be incomplete.</p>
+    </main>
 
     <!-- load javascript after the page elements render -->
     <script src="assets/js/main.js"></script>
