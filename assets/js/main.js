@@ -1,5 +1,5 @@
 // [AI-Assisted: Copilot | 2026-11-10]
-// Intent: Request nearby ALPR locations from the configured Node API and render them safely.
+// Intent: Request nearby ALPR locations from the Node API and render them safely.
 const searchForm = document.getElementById("camera-search");
 const latitudeInput = document.getElementById("latitude");
 const longitudeInput = document.getElementById("longitude");
@@ -94,7 +94,6 @@ function getSearchArea() {
 }
 
 // [AI-Assisted: Copilot | 2026-11-10]
-// [AI-Assisted: Copilot | 2026-11-10]
 // Intent: Fetch live nearby ALPR/ANPR locations through the same-origin Node API.
 async function searchCameras() {
     let area;
@@ -112,7 +111,7 @@ async function searchCameras() {
     });
 
     resultsList.replaceChildren();
-    setStatus("Searching OpenStreetMap for nearby cameras...");
+    setStatus("Checking DeFlock's cached camera data first...");
     searchForm.querySelector('button[type="submit"]').disabled = true;
 
     try {
@@ -132,7 +131,15 @@ async function searchCameras() {
 
         const cameraCount = renderResults(data.elements);
         const cameraLabel = cameraCount === 1 ? "camera" : "cameras";
-        setStatus(`Found ${cameraCount} mapped ${cameraLabel} within ${area.radius.toLocaleString()} meters.`);
+        const sourceNote = data.source === "deflock"
+            ? ` Using DeFlock's cached data${data.dataAsOf ? ` last updated ${new Date(data.dataAsOf).toLocaleDateString()}` : ""}${data.stale ? "; it may be out of date" : ""}.`
+            : data.cached
+                ? " Served from the recent local cache."
+                : " Retrieved from Overpass.";
+        const coverageNote = data.uncoveredRegions > 0
+            ? ` ${data.uncoveredRegions} surrounding region(s) are not available in DeFlock's data.`
+            : "";
+        setStatus(`Found ${cameraCount} mapped ${cameraLabel} within ${area.radius.toLocaleString()} meters.${sourceNote}${coverageNote}`);
     } catch (error) {
         console.error("Could not retrieve OpenStreetMap camera data:", error);
         const message = error instanceof TypeError && error.message === "Failed to fetch"

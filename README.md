@@ -12,6 +12,12 @@ At the beginning of the semester, the [View Source](https://github.com/omundy/di
 
 Your application will consist of HTML, CSS, Javascript, and any additional libraries you may need, but it should address the topic through an interactive experience that involves a user somehow inputting data, and your app transforming that data to reveal insights into your chosen topic.
 
+## Camera data and caching
+
+The Node server first uses DeFlock's published regional OpenStreetMap ALPR feed. It caches the feed index in memory for 15 minutes and each regional tile for one hour, then filters the tile data by the requested radius. Repeated searches in the same regions therefore avoid Overpass entirely. If DeFlock has no data for an area or its feed is unavailable, the server falls back to Overpass and caches an identical search for five minutes. These in-memory caches are cleared when the Node process restarts.
+
+DeFlock's feed can lag behind OpenStreetMap. Search results show the feed's data date and warn when the feed index has expired. If the date is too old for your use, wait for DeFlock to refresh or use the Overpass fallback for areas not covered by its feed.
+
 
 
 <details>
